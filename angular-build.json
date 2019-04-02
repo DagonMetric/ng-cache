@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/@dagonmetric/angular-build/schemas/schema.json#",
+  "libs": [
+    {
+      "extends": "ngb:lib-default",
+      "name": "ng-caching",
+      "root": "modules/ng-caching",
+      "outputPath": "dist/packages/ng-caching",
+      "libraryName": "baf.ngCache"
+    }
+  ],
+  "apps": []
+}
