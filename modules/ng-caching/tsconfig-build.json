@@ -1,0 +1,25 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "../../dist/packages/ng-caching",
+
+    "paths": {
+      "@angular/common": [ "../../node_modules/@angular/common" ],
+      "@angular/core": [ "../../node_modules/@angular/core" ],
+      "rxjs/*": [ "../../node_modules/rxjs/*" ]
+    }
+  },
+  "files": [
+    "public_api.ts"
+  ],
+  "angularCompilerOptions": {
+    "annotateForClosureCompiler": true,
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "fullTemplateTypeCheck": true,
+    "flatModuleOutFile": "ng-caching.js",
+    "flatModuleId": "@dagonmetric/ng-caching"
+  }
+}
