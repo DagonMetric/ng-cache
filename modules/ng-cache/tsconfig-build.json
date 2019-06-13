@@ -1,0 +1,35 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+
+    "importHelpers": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "declaration": true,
+
+    "types": [],
+
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "../../dist/packages/ng-cache",
+
+    "paths": {
+      "@angular/common": [ "../../node_modules/@angular/common" ],
+      "@angular/core": [ "../../node_modules/@angular/core" ]
+    }
+  },
+  "files": [
+    "public_api.ts"
+  ],
+  "angularCompilerOptions": {
+    "annotateForClosureCompiler": true,
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "flatModuleOutFile": "ng-cache.js",
+    "flatModuleId": "@dagonmetric/ng-cache"
+  }
+}

@@ -1,12 +1,22 @@
 {
-  "$schema": "./node_modules/@dagonmetric/angular-build/schemas/schema.json#",
-  "libs": [
-    {
-      "extends": "ngb:lib-default",
-      "name": "ng-caching",
-      "root": "modules/ng-caching",
-      "outputPath": "dist/packages/ng-caching",
-      "libraryName": "baf.ngCache"
+  "$schema": "./node_modules/@dagonmetric/angular-build/src/schemas/schema.json#",
+  "libs": [{
+    "extends": "ngb:lib-default",
+      "name": "ng-cache",
+      "root": "modules/ng-cache",
+      "outputPath": "dist/packages/ng-cache",
+      "libraryName": "ngConfig",
+      "envOverrides": {
+        "prod": {
+          "copy": [
+            "README.md",
+            "../../LICENSE"
+          ],
+          "bundles": true,
+          "packageJsonCopy": true,
+          "banner": "../banner.txt"
+        }
+      }
     }
   ],
   "apps": []

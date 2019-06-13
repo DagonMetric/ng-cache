@@ -87,7 +87,7 @@ export class CacheService {
         }
 
         this._logger = loggerFactory
-            ? loggerFactory.createLogger('bizappframework.ng-caching.cache-service')
+            ? loggerFactory.createLogger('bizappframework.ng-cache.cache-service')
             : {
                 debug(message: string): void {
                     // tslint:disable-next-line:no-console

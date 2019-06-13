@@ -7,19 +7,19 @@
 npm
 
 ```shell
-npm install @myanmartools/ng-caching
+npm install @myanmartools/ng-cache
 ```
 
 or yarn
 
 ```shell
-yarn add @myanmartools/ng-caching
+yarn add @myanmartools/ng-cache
 ```
 
 ## Module Setup (app.module.ts)
 
 ```typescript
-import { CacheLocalStorageModule, CacheModule, MemoryCacheModule } from '@dagonmetric/ng-caching';
+import { CacheLocalStorageModule, CacheModule, MemoryCacheModule } from '@dagonmetric/ng-cache';
 
 @NgModule({
     imports: [
@@ -40,7 +40,7 @@ export class AppModule { }
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
-import { CacheEntryOptions, CacheService, handleCacheResponse } from '@dagonmetric/ng-caching';
+import { CacheEntryOptions, CacheService, handleCacheResponse } from '@dagonmetric/ng-cache';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -77,8 +77,8 @@ export class UserService {
 
 ## Feedback and Contributing
 
-Check out the [Contributing](https://github.com/DagonMetric/ng-caching/blob/master/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
+Check out the [Contributing](https://github.com/DagonMetric/ng-cache/blob/master/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
 
 ## License
 
-This repository is licensed with the [MIT](https://github.com/DagonMetric/ng-caching/blob/master/LICENSE) license.
+This repository is licensed with the [MIT](https://github.com/DagonMetric/ng-cache/blob/master/LICENSE) license.
