@@ -49,7 +49,7 @@
     "@angular/cli": "8.0.2",
     "@angular/compiler-cli": "8.0.0",
     "@angular/language-service": "8.0.0",
-    "@dagonmetric/angular-build": "8.0.0-beta.5",
+    "@dagonmetric/angular-build": "8.0.2",
     "@types/jasmine": "3.3.12",
     "@types/jasminewd2": "2.0.6",
     "@types/node": "11.13.0",
