@@ -12,6 +12,9 @@ import { Cache } from './cache';
 import { CacheItem } from './cache-item';
 import { STORAGE, Storage } from './storage';
 
+/**
+ * In-memory cache implementation.
+ */
 @Injectable({
     providedIn: 'root'
 })

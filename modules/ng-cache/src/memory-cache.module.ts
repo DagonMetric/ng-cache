@@ -6,11 +6,14 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import { CACHE } from './cache';
 import { MemoryCache } from './memory-cache';
 
+/**
+ * The `NGMODULE` for providing `CACHE` with `MemoryCache`.
+ */
 @NgModule({
     providers: [
         {
@@ -19,10 +22,4 @@ import { MemoryCache } from './memory-cache';
         }
     ]
 })
-export class MemoryCacheModule {
-    constructor(@Optional() @SkipSelf() parentModule: MemoryCacheModule) {
-        if (parentModule) {
-            throw new Error('MemoryCacheModule has already been loaded, import in root module only.');
-        }
-    }
-}
+export class MemoryCacheModule { }

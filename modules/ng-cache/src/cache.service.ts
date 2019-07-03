@@ -6,99 +6,49 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angular/core';
+// tslint:disable: no-any
 
-import { from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+// import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, Optional } from '@angular/core';
+
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Cache, CACHE } from './cache';
-import { CacheCheckResult } from './cache-check-result';
 import { CacheEntryOptions } from './cache-entry-options';
 import { CacheItem } from './cache-item';
 import { CACHE_OPTIONS, CacheOptions } from './cache-options';
 import { INITIAL_CACHE_DATA, InitialCacheData } from './initial-cache-data';
+import { LoggingApi } from './logging-api';
 import { ReturnType } from './return-type';
 import { VERSION } from './version';
 
-export const REMOTE_CACHE_CHECKER_ENDPOINT_URL = new InjectionToken<string>('RemoteCacheCheckerEndpointUrl');
-
+/**
+ * The core cache service implementation.
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class CacheService {
-    private readonly _cacheOptions: CacheOptions;
-    private readonly _logger: {
-        debug(message: string): void;
-        error(message: string | Error): void;
-    };
-    private readonly _remoteCacheCheckInterval = 1000 * 60 * 60;
+    private readonly _options: CacheOptions;
+    private readonly _logger: LoggingApi;
 
-    get enableRemoteCacheCheck(): boolean {
-        if (!this._cacheOptions.enableRemoteCacheCheck) {
-            return false;
-        }
-
-        if (isPlatformServer(this._platformId) && !this._cacheOptions.enableRemoteCacheCheckInPlatformServer) {
-            return false;
-        }
-
-        return true;
-    }
-
-    constructor(@Inject(CACHE) private readonly _cache: Cache,
-        @Inject(PLATFORM_ID) private readonly _platformId: Object,
-        @Optional() private readonly _httpClient?: HttpClient,
-        @Optional() @Inject(INITIAL_CACHE_DATA) data?: InitialCacheData,
+    constructor(
+        @Inject(CACHE) private readonly _cache: Cache,
         @Optional() @Inject(CACHE_OPTIONS) options?: CacheOptions,
-        @Optional() @Inject(REMOTE_CACHE_CHECKER_ENDPOINT_URL) remoteCacheCheckerEndpointUrl?: string,
-        @Optional() @Inject('LOGGER_FACTORY') loggerFactory?: any) {
-        this._cacheOptions = {
-            ...options
+        @Optional() @Inject(INITIAL_CACHE_DATA) data?: InitialCacheData) {
+        this._options = options || {};
+        this._logger = this._options.logger || {
+            debug(message: string, optionalParam: any): void {
+                // tslint:disable-next-line: no-console
+                console.log(message, optionalParam);
+            },
+            error(message: string | Error, optionalParam: any): void {
+                console.error(message, optionalParam);
+            }
         };
-        if (this._cacheOptions.remoteCacheCheckInterval) {
-            this._remoteCacheCheckInterval = this._cacheOptions.remoteCacheCheckInterval;
-        }
 
-        if (this.enableRemoteCacheCheck) {
-            if (!this._httpClient) {
-                throw new Error('HttpClient service is not provided.');
-            }
-
-            const httpClient = this._httpClient;
-            let checkerEndpointUrl = '';
-            if (this._cacheOptions.remoteCacheCheckerEndpointUrl) {
-                checkerEndpointUrl = typeof this._cacheOptions.remoteCacheCheckerEndpointUrl === 'string'
-                    ? this._cacheOptions.remoteCacheCheckerEndpointUrl
-                    : (this._cacheOptions.remoteCacheCheckerEndpointUrl as Function)();
-            }
-
-            if (!checkerEndpointUrl && remoteCacheCheckerEndpointUrl) {
-                checkerEndpointUrl = remoteCacheCheckerEndpointUrl;
-            }
-
-            if (!checkerEndpointUrl) {
-                throw new Error('The remoteCacheCheckerEndpointUrl is not provided.');
-            }
-            this._cacheOptions.remoteCacheChecker = (key: string, hash: string): Observable<CacheCheckResult> => {
-                return httpClient.post<CacheCheckResult>(checkerEndpointUrl, { key: key, hash: hash });
-            };
-        }
-
-        this._logger = loggerFactory
-            ? loggerFactory.createLogger('bizappframework.ng-cache.cache-service')
-            : {
-                debug(message: string): void {
-                    // tslint:disable-next-line:no-console
-                    console.debug(message);
-                },
-                error(message: Error | string): void {
-                    console.error(message);
-                }
-            };
-
-        if (this._cacheOptions.clearPreviousCache) {
+        if (this._options.clearPreviousCache) {
             this.clear();
         } else {
             this.checkStorage();
@@ -108,12 +58,12 @@ export class CacheService {
         if (data) {
             const mappedData: { [key: string]: CacheItem } = {};
             Object.keys(data)
-            .forEach(key => {
-                const cacheItem: CacheItem = {
-                    data: data[key]
-                };
-                mappedData[key] = cacheItem;
-            });
+                .forEach(key => {
+                    const cacheItem: CacheItem = {
+                        data: data[key]
+                    };
+                    mappedData[key] = cacheItem;
+                });
             this._cache.init(mappedData);
         }
     }
@@ -200,21 +150,19 @@ export class CacheService {
     }
 
     private logDebug(message: string): void {
-        if (this._cacheOptions.enableDebug) {
+        if (this._options.enableDebug) {
             this._logger.debug(message);
         }
     }
 
-    private logError(message: Error | string): void {
-        this._logger.error(message);
-    }
+    // private logError(message: Error | string): void {
+    //     this._logger.error(message);
+    // }
 
     private getOrSetInternal(key: string,
         factory: (entryOptions: CacheEntryOptions) => Observable<any> | Promise<any> | Object,
         options?: CacheEntryOptions,
-        returnType: ReturnType = ReturnType.Observable): Observable<any> |
-        Promise<any> |
-        Object {
+        returnType: ReturnType = ReturnType.Observable): Observable<any> | Promise<any> | Object {
         const entryOptions = this.prepareCacheEntryOptions(options);
         const cachedItem = this._cache.getItem(key);
 
@@ -228,71 +176,6 @@ export class CacheService {
             return this.invokeFactory(key, factory, entryOptions);
         }
 
-        const cacheChecker = this._cacheOptions.remoteCacheChecker;
-
-        if (this.enableRemoteCacheCheck &&
-            cacheChecker &&
-            cachedItem.hash &&
-            (!cachedItem.lastRemoteCheckTime ||
-                cachedItem.lastRemoteCheckTime <= Date.now() - this._remoteCacheCheckInterval)) {
-            if (returnType === ReturnType.Sync) {
-                throw new Error("To use remote cache checker, returnType must be 'Observable' or 'Promise'.");
-            }
-
-            this.logDebug('Invoking remote cache checker function');
-            const ret$ = cacheChecker(key, cachedItem.hash)
-                .pipe(catchError(err => {
-                    this.logError(err);
-
-                    // tslint:disable-next-line:no-null-keyword
-                    return of(null);
-                }),
-                    switchMap((result: CacheCheckResult) => {
-                        // if error
-                        if (!result) {
-                            this.refreshLastAccessTime(key, cachedItem);
-
-                            return of(cachedItem.data);
-                        }
-
-                        if (result.expired) {
-                            this.logDebug(`Cache expired, key: ${key}`);
-                            this.removeItem(key);
-
-                            if (result.absoluteExpiration) {
-                                entryOptions.absoluteExpiration = result.absoluteExpiration;
-                            }
-                            if (result.hash) {
-                                entryOptions.hash = result.hash;
-                            }
-
-                            const retValue$ = this.invokeFactory(key, factory, entryOptions, true);
-                            if (retValue$ instanceof Observable) {
-                                return retValue$;
-                            } else if (retValue$ instanceof Promise) {
-                                return from(retValue$);
-                            } else {
-                                return of(retValue$);
-                            }
-                        } else {
-                            this.logDebug(`Cache valid, key: ${key}`);
-                            cachedItem.lastRemoteCheckTime = Date.now();
-                            if (result.absoluteExpiration) {
-                                cachedItem.absoluteExpiration = result.absoluteExpiration;
-                            }
-                            this.refreshLastAccessTime(key, cachedItem);
-
-                            return of(cachedItem.data);
-                        }
-                    }));
-
-            if (returnType === ReturnType.Promise) {
-                return ret$.toPromise();
-            } else {
-                return ret$;
-            }
-        }
-
         this.refreshLastAccessTime(key, cachedItem);
 
         if (returnType === ReturnType.Sync) {
@@ -304,29 +187,30 @@ export class CacheService {
         }
     }
 
-    private invokeFactory(key: string,
-        factory: (entryOptions: CacheEntryOptions) => Observable<any> | Promise<any> | Object,
+    private invokeFactory(
+        key: string,
+        factory: (entryOptions: CacheEntryOptions) => Observable<Object> | Promise<Object> | Object,
         options: CacheEntryOptions,
         setLastRemoteCheckTime?: boolean):
         Observable<any> | Promise<any> | Object {
-        const retValue$ = factory(options);
+        const retValue = factory(options);
 
-        if (retValue$ instanceof Observable) {
-            return retValue$.pipe(map(value => {
+        if (retValue instanceof Observable) {
+            return retValue.pipe(map(value => {
                 this.setItemInternal(key, value, options, true, setLastRemoteCheckTime);
 
                 return value;
             }));
-        } else if (retValue$ instanceof Promise) {
-            return retValue$.then(value => {
+        } else if (retValue instanceof Promise) {
+            return retValue.then(value => {
                 this.setItemInternal(key, value, options, true, setLastRemoteCheckTime);
 
                 return value;
             });
         } else {
-            this.setItemInternal(key, retValue$, options, true, setLastRemoteCheckTime);
+            this.setItemInternal(key, retValue, options, true, setLastRemoteCheckTime);
 
-            return retValue$;
+            return retValue;
         }
     }
 
@@ -363,8 +247,8 @@ export class CacheService {
             throw new Error('The absolute expiration value must be positive.');
         }
 
-        const absoluteExpiration = this._cacheOptions.absoluteExpirationRelativeToNow
-            ? Date.now() + this._cacheOptions.absoluteExpirationRelativeToNow
+        const absoluteExpiration = this._options.absoluteExpirationRelativeToNow
+            ? Date.now() + this._options.absoluteExpirationRelativeToNow
             : undefined;
 
         return {
@@ -374,7 +258,6 @@ export class CacheService {
     }
 
     private isValid(cachedItem: CacheItem): boolean {
-        // tslint:disable-next-line:no-null-keyword
         let valid = cachedItem.data != null;
         if (!valid) {
             return false;

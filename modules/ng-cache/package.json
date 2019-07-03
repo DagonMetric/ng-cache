@@ -1,14 +1,15 @@
 {
   "name": "@dagonmetric/ng-cache",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Caching service package for Angular application.",
+  "description": "Caching service package for Angular applications.",
   "keywords": [
     "angular-caching",
     "angular-cache",
-    "angular-caching-service",
     "angular-cache-service",
     "caching",
     "cache",
+    "memory-cache",
+    "local-storage",
     "angular"
   ],
   "author": "",

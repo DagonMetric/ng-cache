@@ -8,19 +8,13 @@
 
 import { InjectionToken } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { CacheCheckResult } from './cache-check-result';
+import { LoggingApi } from './logging-api';
 
 export interface CacheOptions {
     absoluteExpirationRelativeToNow?: number;
     clearPreviousCache?: boolean;
     enableDebug?: boolean;
-    enableRemoteCacheCheck?: boolean;
-    enableRemoteCacheCheckInPlatformServer?: boolean;
-    remoteCacheCheckInterval?: number;
-    remoteCacheCheckerEndpointUrl?: string | (() => string);
-    remoteCacheChecker?(key: string, hash: string): Observable<CacheCheckResult>;
+    logger?: LoggingApi;
 }
 
 export const CACHE_OPTIONS = new InjectionToken<CacheOptions>('CacheOptions');

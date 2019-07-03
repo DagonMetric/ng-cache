@@ -11,13 +11,16 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CACHE_OPTIONS, CacheOptions } from './cache-options';
 import { CacheService } from './cache.service';
 
+/**
+ * The `NGMODULE` for providing `CacheService`.
+ */
 @NgModule({
     providers: [
         CacheService
     ]
 })
 export class CacheModule {
-    static forRoot(options: CacheOptions): ModuleWithProviders {
+    static withOptions(options: CacheOptions): ModuleWithProviders {
         return {
             ngModule: CacheModule,
             providers: [

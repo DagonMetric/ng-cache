@@ -15,6 +15,9 @@ export const STORAGE_CACHE_KEY_PREFIX = new InjectionToken<string>('StorageCache
 export const DEFAULT_STORAGE_CACHE_KEY_PREFIX = '_cache_.';
 export const STORED_VERSION_KEY = '_ngcache_version_';
 
+/**
+ * The `localStorage` implementation for `Storage`.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -98,7 +101,17 @@ export class CacheLocalStorage implements Storage {
 
         const value = localStorage.getItem(`${this._cacheKeyPrefix}${key}`);
 
-        return value ? JSON.parse(value) : value;
+        if (value == null) {
+            return undefined;
+        }
+
+        const obj = JSON.parse(value);
+
+        if (typeof obj === 'object') {
+            return obj as CacheItem;
+        }
+
+        return undefined;
     }
 
     removeItem(key: string): void {

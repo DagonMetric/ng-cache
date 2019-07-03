@@ -11,6 +11,9 @@ import { NgModule } from '@angular/core';
 import { CacheLocalStorage } from './cache-local-storage';
 import { STORAGE } from './storage';
 
+/**
+ * The `NGMODULE` for providing `STORAGE` with `CacheLocalStorage`.
+ */
 @NgModule({
     providers: [
         {

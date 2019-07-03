@@ -13,7 +13,7 @@ import { Storage } from './storage';
 
 export interface Cache {
     readonly keys: string[];
-    readonly storage: Storage | null | undefined;
+    readonly storage?: Storage | null;
     init(data?: { [key: string]: CacheItem }): void;
     getItem(key: string): CacheItem | null | undefined;
     setItem(key: string, value: CacheItem): void;

@@ -5,7 +5,7 @@
       "name": "ng-cache",
       "root": "modules/ng-cache",
       "outputPath": "dist/packages/ng-cache",
-      "libraryName": "ngConfig",
+      "libraryName": "ngCache",
       "envOverrides": {
         "prod": {
           "copy": [
