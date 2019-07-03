@@ -5,7 +5,7 @@
   "projects": {
     "ng-cache": {
       "root": "modules/ng-cache",
-      "sourceRoot": "modules/ng-cache",
+      "sourceRoot": "modules/ng-cache/src",
       "projectType": "library",
       "architect": {
         "build": {
@@ -54,6 +54,6 @@
           }
         }
       }
-    }   
+    }
   }
 }
