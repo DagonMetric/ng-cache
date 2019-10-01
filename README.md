@@ -15,13 +15,13 @@ Caching service for Angular applications.
 npm
 
 ```bash
-npm install @myanmartools/ng-cache
+npm install @dagonmetric/ng-cache
 ```
 
 or yarn
 
 ```bash
-yarn add @myanmartools/ng-cache
+yarn add @dagonmetric/ng-cache
 ```
 
 ### Module Setup (app.module.ts)
