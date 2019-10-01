@@ -12,9 +12,16 @@
     "local-storage",
     "angular"
   ],
-  "author": "",
-  "license": "",
-  "repository": "",
+  "author": "DagonMetric",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/Dagonmetric/ng-cache.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dagonmetric/ng-cache/issues"
+  },
+  "homepage": "https://github.com/Dagonmetric/ng-cache",
   "dependencies": {
     "tslib": "^1.10.0"
   },
