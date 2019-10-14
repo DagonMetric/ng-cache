@@ -1,9 +1,16 @@
 {
   "name": "ng-cache",
   "version": "2.0.2",
-  "private": true,
   "author": "DagonMetric",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dagonmetric/ng-cache.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dagonmetric/ng-cache/issues"
+  },
+  "homepage": "https://github.com/Dagonmetric/ng-cache",
   "scripts": {
     "ng": "ng",
     "ngb": "ngb",

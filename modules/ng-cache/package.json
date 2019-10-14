@@ -2,6 +2,16 @@
   "name": "@dagonmetric/ng-cache",
   "version": "0.0.0-PLACEHOLDER",
   "description": "Caching service package for Angular applications.",
+  "author": "DagonMetric",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dagonmetric/ng-cache.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dagonmetric/ng-cache/issues"
+  },
+  "homepage": "https://github.com/Dagonmetric/ng-cache",
   "keywords": [
     "angular-caching",
     "angular-cache",
@@ -12,16 +22,6 @@
     "local-storage",
     "angular"
   ],
-  "author": "DagonMetric",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com/Dagonmetric/ng-cache.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Dagonmetric/ng-cache/issues"
-  },
-  "homepage": "https://github.com/Dagonmetric/ng-cache",
   "dependencies": {
     "tslib": "^1.10.0"
   },
