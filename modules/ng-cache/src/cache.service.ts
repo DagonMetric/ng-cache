@@ -92,26 +92,31 @@ export class CacheService {
         return this.getOrSetInternal(key, factory, options, ReturnType.Sync);
     }
 
-    async getOrSetPromise<T>(key: string,
+    async getOrSetPromise<T>(
+        key: string,
         factory: (entryOptions: CacheEntryOptions) => Promise<T>,
         options?: CacheEntryOptions): Promise<T>;
 
-    async getOrSetPromise(key: string,
+    async getOrSetPromise(
+        key: string,
         factory: (entryOptions: CacheEntryOptions) => Promise<any>,
         options?: CacheEntryOptions): Promise<any> {
         return this.getOrSetInternal(key, factory, options, ReturnType.Promise) as Promise<any>;
     }
 
-    getOrSet<T>(key: string,
+    getOrSet<T>(
+        key: string,
         factory: (entryOptions: CacheEntryOptions) => Observable<T>,
         options?: CacheEntryOptions): Observable<T>;
 
-    getOrSet(key: string,
+    getOrSet(
+        key: string,
         factory: (entryOptions: CacheEntryOptions) => Observable<any>,
         options?: CacheEntryOptions): Observable<any> {
         return this.getOrSetInternal(key, factory, options, ReturnType.Observable) as Observable<any>;
     }
 
+    // tslint:disable-next-line: ban-types
     setItem(key: string, value: Object, options?: CacheEntryOptions): void {
         const entryOptions = this.prepareCacheEntryOptions(options);
         this.setItemInternal(key, value, entryOptions, false, false);
@@ -159,9 +164,12 @@ export class CacheService {
     //     this._logger.error(message);
     // }
 
-    private getOrSetInternal(key: string,
+    private getOrSetInternal(
+        key: string,
+        // tslint:disable-next-line: ban-types
         factory: (entryOptions: CacheEntryOptions) => Observable<any> | Promise<any> | Object,
         options?: CacheEntryOptions,
+        // tslint:disable-next-line: ban-types
         returnType: ReturnType = ReturnType.Observable): Observable<any> | Promise<any> | Object {
         const entryOptions = this.prepareCacheEntryOptions(options);
         const cachedItem = this._cache.getItem(key);
@@ -189,9 +197,11 @@ export class CacheService {
 
     private invokeFactory(
         key: string,
+        // tslint:disable-next-line: ban-types
         factory: (entryOptions: CacheEntryOptions) => Observable<Object> | Promise<Object> | Object,
         options: CacheEntryOptions,
         setLastRemoteCheckTime?: boolean):
+        // tslint:disable-next-line: ban-types
         Observable<any> | Promise<any> | Object {
         const retValue = factory(options);
 
@@ -214,7 +224,9 @@ export class CacheService {
         }
     }
 
-    private setItemInternal(key: string,
+    private setItemInternal(
+        key: string,
+        // tslint:disable-next-line: ban-types
         value: Object,
         options: CacheEntryOptions,
         setLastAccessTime: boolean,
@@ -252,7 +264,7 @@ export class CacheService {
             : undefined;
 
         return {
-            absoluteExpiration: absoluteExpiration,
+            absoluteExpiration,
             ...options
         };
     }

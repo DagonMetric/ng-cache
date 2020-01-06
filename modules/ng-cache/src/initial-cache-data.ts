@@ -9,6 +9,7 @@
 import { InjectionToken } from '@angular/core';
 
 export interface InitialCacheData {
+    // tslint:disable-next-line: ban-types
     [key: string]: Object;
 }
 
