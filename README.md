@@ -1,11 +1,11 @@
 # Caching Service for Angular
 
-[![Build Status](https://dev.azure.com/DagonMetric/ng-cache/_apis/build/status/DagonMetric.ng-cache?branchName=master)](https://dev.azure.com/DagonMetric/ng-cache/_build/latest?definitionId=13&branchName=master)
-[![CircleCI](https://circleci.com/gh/DagonMetric/ng-cache/tree/master.svg?style=svg)](https://circleci.com/gh/DagonMetric/ng-cache/tree/master)
+[![GitHub Actions Status](https://github.com/DagonMetric/ng-cache/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-cache/actions)
+[![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-cache/_apis/build/status/DagonMetric.ng-cache?branchName=master)](https://dev.azure.com/DagonMetric/ng-cache/_build/latest?definitionId=13&branchName=master)
 [![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-cache.svg)](https://www.npmjs.com/package/@dagonmetric/ng-cache)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Caching service for Angular applications.
+Caching & storage service for Angular applications.
 
 ## Get Started
 
