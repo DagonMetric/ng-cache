@@ -7,7 +7,7 @@
  */
 
 export interface CacheItem {
-    data: { [key: string]: unknown };
+    data: unknown;
     hash?: string;
     absoluteExpiration?: number | null;
     lastAccessTime?: number | null;
