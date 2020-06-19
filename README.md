@@ -47,21 +47,23 @@ Live edit [app.module.ts in stackblitz](https://stackblitz.com/github/dagonmetri
 ### Usage (app.component.ts)
 
 ```typescript
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
+import { Observable } from 'rxjs';
+
+// ng-cache
 import { CacheService } from '@dagonmetric/ng-cache';
-import { Observable } from 'rxjs/Observable';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
-  constructor(
-    private readonly _cacheService: CacheService,
-    private readonly _httpClient: HttpClient) { }
+  constructor(private cacheService: CacheService, private httpClient: HttpClient) { }
 
   getUsers(): Observable<User[]> {
-    return this._cacheService.getOrSet('users', () => {
-      return this._httpClient.get<User[]>('/api/users');
+    return this.cacheService.getOrSet('users', () => {
+      return this.httpClient.get<User[]>('/api/users');
     });
   }
 }
@@ -69,7 +71,7 @@ export class UserService {
 
 Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-cache/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.component.ts)
 
-## Samples & Documentations
+## Samples
 
 * Demo app [view source](https://github.com/DagonMetric/ng-cache/tree/master/samples/demo-app) / [live edit in stackblitz](https://stackblitz.com/github/dagonmetric/ng-cache/tree/master/samples/demo-app)
 
