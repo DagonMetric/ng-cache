@@ -22,4 +22,4 @@ import { STORAGE } from './storage';
         }
     ]
 })
-export class CacheLocalStorageModule { }
+export class CacheLocalStorageModule {}
