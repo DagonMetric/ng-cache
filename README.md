@@ -4,7 +4,7 @@
 [![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-cache/_apis/build/status/DagonMetric.ng-cache?branchName=master)](https://dev.azure.com/DagonMetric/ng-cache/_build/latest?definitionId=13&branchName=master)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Caching & storage service for Angular applications.
+Caching service for Angular applications.
 
 ## Get Started
 
