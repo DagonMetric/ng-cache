@@ -12,9 +12,18 @@ import { HttpResponse } from '@angular/common/http';
 
 import { CacheEntryOptions } from './cache-entry-options';
 
-export function handleCacheResponse<T>(response: HttpResponse<T>, cacheInfoKey: string, entryOptions: CacheEntryOptions): T;
+export function handleCacheResponse<T>(
+    response: HttpResponse<T>,
+    cacheInfoKey: string,
+    entryOptions: CacheEntryOptions
+): T;
 
-export function handleCacheResponse(response: HttpResponse<any>, cacheInfoKey: string, entryOptions: CacheEntryOptions): any {
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+export function handleCacheResponse(
+    response: HttpResponse<unknown>,
+    cacheInfoKey: string,
+    entryOptions: CacheEntryOptions
+): unknown {
     if (cacheInfoKey && response.headers.has(cacheInfoKey)) {
         const headerValue = response.headers.get(cacheInfoKey);
         if (headerValue) {
