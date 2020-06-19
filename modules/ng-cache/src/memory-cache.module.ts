@@ -22,4 +22,4 @@ import { MemoryCache } from './memory-cache';
         }
     ]
 })
-export class MemoryCacheModule { }
+export class MemoryCacheModule {}
