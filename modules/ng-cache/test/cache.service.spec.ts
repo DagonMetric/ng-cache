@@ -40,7 +40,7 @@ describe('CacheService', () => {
         void expect(cacheService.getItem<string>('key1')).toBe('value1');
         void expect(cacheService.getItem<boolean>('key2')).toEqual(false);
         void expect(cacheService.getItem<number>('key3')).toEqual(0);
-        void expect(cacheService.getItem('key4')).toEqual({ a: 1, b: 2 });
+        void expect(cacheService.getItem<{ a: number; b: number }>('key4')).toEqual({ a: 1, b: 2 });
     });
 
     it("should work with 'setItem'", () => {
