@@ -14,7 +14,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Cache, CACHE } from './cache';
+import { CACHE, Cache } from './cache';
 import { CacheEntryOptions } from './cache-entry-options';
 import { CacheItem } from './cache-item';
 import { CACHE_OPTIONS, CacheOptions } from './cache-options';
@@ -30,25 +30,28 @@ import { VERSION } from './version';
     providedIn: 'root'
 })
 export class CacheService {
-    private readonly _options: CacheOptions;
-    private readonly _logger: LoggingApi;
+    private readonly options: CacheOptions;
+    private readonly logger: LoggingApi;
 
     constructor(
-        @Inject(CACHE) private readonly _cache: Cache,
+        @Inject(CACHE) private readonly cache: Cache,
         @Optional() @Inject(CACHE_OPTIONS) options?: CacheOptions,
-        @Optional() @Inject(INITIAL_CACHE_DATA) data?: InitialCacheData) {
-        this._options = options || {};
-        this._logger = this._options.logger || {
-            debug(message: string, optionalParam: any): void {
-                // tslint:disable-next-line: no-console
+        @Optional() @Inject(INITIAL_CACHE_DATA) data?: InitialCacheData
+    ) {
+        this.options = options || {};
+        this.logger = this.options.logger || {
+            // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+            debug(message: string, optionalParam: unknown): void {
+                // eslint-disable-next-line no-console
                 console.log(message, optionalParam);
             },
-            error(message: string | Error, optionalParam: any): void {
+            // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+            error(message: string | Error, optionalParam: unknown): void {
                 console.error(message, optionalParam);
             }
         };
 
-        if (this._options.clearPreviousCache) {
+        if (this.options.clearPreviousCache) {
             this.clear();
         } else {
             this.checkStorage();
@@ -57,21 +60,20 @@ export class CacheService {
         // init cache
         if (data) {
             const mappedData: { [key: string]: CacheItem } = {};
-            Object.keys(data)
-                .forEach(key => {
-                    const cacheItem: CacheItem = {
-                        data: data[key]
-                    };
-                    mappedData[key] = cacheItem;
-                });
-            this._cache.init(mappedData);
+            Object.keys(data).forEach((key) => {
+                const cacheItem: CacheItem = {
+                    data: data[key]
+                };
+                mappedData[key] = cacheItem;
+            });
+            this.cache.init(mappedData);
         }
     }
 
     getItem<T>(key: string): T | null;
 
-    getItem(key: string): any {
-        const cachedItem = this._cache.getItem(key);
+    getItem(key: string): unknown {
+        const cachedItem = this.cache.getItem(key);
 
         if (cachedItem) {
             if (this.isValid(cachedItem)) {
@@ -88,64 +90,72 @@ export class CacheService {
 
     getOrSetSync<T>(key: string, factory: (entryOptions: CacheEntryOptions) => T, options?: CacheEntryOptions): T;
 
-    getOrSetSync(key: string, factory: (entryOptions: CacheEntryOptions) => any, options?: CacheEntryOptions): any {
+    getOrSetSync(
+        key: string,
+        factory: (entryOptions: CacheEntryOptions) => unknown,
+        options?: CacheEntryOptions
+    ): unknown {
         return this.getOrSetInternal(key, factory, options, ReturnType.Sync);
     }
 
     async getOrSetPromise<T>(
         key: string,
         factory: (entryOptions: CacheEntryOptions) => Promise<T>,
-        options?: CacheEntryOptions): Promise<T>;
+        options?: CacheEntryOptions
+    ): Promise<T>;
 
     async getOrSetPromise(
         key: string,
-        factory: (entryOptions: CacheEntryOptions) => Promise<any>,
-        options?: CacheEntryOptions): Promise<any> {
-        return this.getOrSetInternal(key, factory, options, ReturnType.Promise) as Promise<any>;
+        factory: (entryOptions: CacheEntryOptions) => Promise<unknown>,
+        options?: CacheEntryOptions
+    ): Promise<unknown> {
+        return this.getOrSetInternal(key, factory, options, ReturnType.Promise) as Promise<unknown>;
     }
 
     getOrSet<T>(
         key: string,
         factory: (entryOptions: CacheEntryOptions) => Observable<T>,
-        options?: CacheEntryOptions): Observable<T>;
+        options?: CacheEntryOptions
+    ): Observable<T>;
 
     getOrSet(
         key: string,
-        factory: (entryOptions: CacheEntryOptions) => Observable<any>,
-        options?: CacheEntryOptions): Observable<any> {
-        return this.getOrSetInternal(key, factory, options, ReturnType.Observable) as Observable<any>;
+        factory: (entryOptions: CacheEntryOptions) => Observable<unknown>,
+        options?: CacheEntryOptions
+    ): Observable<unknown> {
+        return this.getOrSetInternal(key, factory, options, ReturnType.Observable) as Observable<unknown>;
     }
 
-    // tslint:disable-next-line: ban-types
-    setItem(key: string, value: Object, options?: CacheEntryOptions): void {
+    setItem(key: string, value: unknown, options?: CacheEntryOptions): void {
         const entryOptions = this.prepareCacheEntryOptions(options);
         this.setItemInternal(key, value, entryOptions, false, false);
     }
 
     removeItem(key: string): void {
-        this._cache.removeItem(key);
+        this.cache.removeItem(key);
     }
 
     clear(): void {
-        this._cache.clear();
+        this.cache.clear();
     }
 
     private checkStorage(): void {
-        if (!this._cache.storage ||
-            !this._cache.storage.enabled) {
+        if (!this.cache.storage || !this.cache.storage.enabled) {
             return;
         }
 
-        const storageLocal = this._cache.storage;
+        const storageLocal = this.cache.storage;
 
         this.logDebug('Checking storage cache');
 
+        // eslint-disable-next-line no-underscore-dangle
         const ngCacheVersion = storageLocal._getNgCacheVersion();
         if (ngCacheVersion !== VERSION.full) {
             this.clear();
+            // eslint-disable-next-line no-underscore-dangle
             storageLocal._setNgCacheVersion(VERSION.full);
         } else {
-            storageLocal.keys.forEach(key => {
+            storageLocal.keys.forEach((key) => {
                 const cacheItem = storageLocal.getItem(key);
                 if (!cacheItem || !this.isValid(cacheItem)) {
                     storageLocal.removeItem(key);
@@ -155,24 +165,19 @@ export class CacheService {
     }
 
     private logDebug(message: string): void {
-        if (this._options.enableDebug) {
-            this._logger.debug(message);
+        if (this.options.enableDebug) {
+            this.logger.debug(message);
         }
     }
 
-    // private logError(message: Error | string): void {
-    //     this._logger.error(message);
-    // }
-
     private getOrSetInternal(
         key: string,
-        // tslint:disable-next-line: ban-types
-        factory: (entryOptions: CacheEntryOptions) => Observable<any> | Promise<any> | Object,
+        factory: (entryOptions: CacheEntryOptions) => Observable<unknown> | Promise<unknown> | unknown,
         options?: CacheEntryOptions,
-        // tslint:disable-next-line: ban-types
-        returnType: ReturnType = ReturnType.Observable): Observable<any> | Promise<any> | Object {
+        returnType: ReturnType = ReturnType.Observable
+    ): Observable<unknown> | Promise<unknown> | unknown {
         const entryOptions = this.prepareCacheEntryOptions(options);
-        const cachedItem = this._cache.getItem(key);
+        const cachedItem = this.cache.getItem(key);
 
         if (!cachedItem) {
             return this.invokeFactory(key, factory, entryOptions);
@@ -197,25 +202,25 @@ export class CacheService {
 
     private invokeFactory(
         key: string,
-        // tslint:disable-next-line: ban-types
-        factory: (entryOptions: CacheEntryOptions) => Observable<Object> | Promise<Object> | Object,
+        factory: (entryOptions: CacheEntryOptions) => Observable<unknown> | Promise<unknown> | unknown,
         options: CacheEntryOptions,
-        setLastRemoteCheckTime?: boolean):
-        // tslint:disable-next-line: ban-types
-        Observable<any> | Promise<any> | Object {
+        setLastRemoteCheckTime?: boolean
+    ): Observable<unknown> | Promise<unknown> | unknown {
         const retValue = factory(options);
 
         if (retValue instanceof Observable) {
-            return retValue.pipe(map(value => {
-                this.setItemInternal(key, value, options, true, setLastRemoteCheckTime);
+            return retValue.pipe(
+                map((value) => {
+                    this.setItemInternal(key, value, options, true, setLastRemoteCheckTime);
 
-                return value;
-            }));
+                    return value as unknown;
+                })
+            );
         } else if (retValue instanceof Promise) {
-            return retValue.then(value => {
+            return retValue.then((value) => {
                 this.setItemInternal(key, value, options, true, setLastRemoteCheckTime);
 
-                return value;
+                return value as unknown;
             });
         } else {
             this.setItemInternal(key, retValue, options, true, setLastRemoteCheckTime);
@@ -226,11 +231,11 @@ export class CacheService {
 
     private setItemInternal(
         key: string,
-        // tslint:disable-next-line: ban-types
-        value: Object,
+        value: unknown,
         options: CacheEntryOptions,
         setLastAccessTime: boolean,
-        setLastRemoteCheckTime?: boolean): void {
+        setLastRemoteCheckTime?: boolean
+    ): void {
         const cacheItem: CacheItem = {
             data: value,
             absoluteExpiration: options.absoluteExpiration,
@@ -246,12 +251,12 @@ export class CacheService {
             cacheItem.lastRemoteCheckTime = now;
         }
 
-        this._cache.setItem(key, cacheItem);
+        this.cache.setItem(key, cacheItem);
     }
 
     private refreshLastAccessTime(key: string, cachedItem: CacheItem): void {
         cachedItem.lastAccessTime = Date.now();
-        this._cache.setItem(key, cachedItem);
+        this.cache.setItem(key, cachedItem);
     }
 
     private prepareCacheEntryOptions(options?: CacheEntryOptions): CacheEntryOptions {
@@ -259,8 +264,8 @@ export class CacheService {
             throw new Error('The absolute expiration value must be positive.');
         }
 
-        const absoluteExpiration = this._options.absoluteExpirationRelativeToNow
-            ? Date.now() + this._options.absoluteExpirationRelativeToNow
+        const absoluteExpiration = this.options.absoluteExpirationRelativeToNow
+            ? Date.now() + this.options.absoluteExpirationRelativeToNow
             : undefined;
 
         return {
