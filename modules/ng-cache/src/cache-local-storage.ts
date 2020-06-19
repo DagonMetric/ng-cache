@@ -22,37 +22,36 @@ export const STORED_VERSION_KEY = '_ngcache_version_';
     providedIn: 'root'
 })
 export class CacheLocalStorage implements Storage {
-    private readonly _cacheKeyPrefix: string;
-    private _enabled: boolean | null | undefined;
+    private readonly cacheKeyPrefix: string;
+    private enabledInternal: boolean | null | undefined;
 
     get enabled(): boolean {
-        if (typeof this._enabled === 'boolean') {
-            return this._enabled;
+        if (typeof this.enabledInternal === 'boolean') {
+            return this.enabledInternal;
         }
 
         if (!localStorage) {
-            this._enabled = false;
+            this.enabledInternal = false;
 
-            return this._enabled;
+            return this.enabledInternal;
         }
 
         try {
             let testKey = '__test__';
             let i = 1;
-            while (!!localStorage.getItem(testKey)) {
+            while (localStorage.getItem(testKey)) {
                 testKey = `${testKey}${i}`;
                 i = i + 1;
             }
             localStorage.setItem(testKey, 'test');
             localStorage.removeItem(testKey);
-            this._enabled = true;
+            this.enabledInternal = true;
 
-            return this._enabled;
-
+            return this.enabledInternal;
         } catch (e) {
-            this._enabled = false;
+            this.enabledInternal = false;
 
-            return this._enabled;
+            return this.enabledInternal;
         }
     }
 
@@ -66,10 +65,10 @@ export class CacheLocalStorage implements Storage {
         }
 
         return Object.keys(localStorage)
-            .filter(key => !this._cacheKeyPrefix || key.startsWith(this._cacheKeyPrefix))
+            .filter((key) => !this.cacheKeyPrefix || key.startsWith(this.cacheKeyPrefix))
             .map((key: string) => {
-                if (this._cacheKeyPrefix && key.length > this._cacheKeyPrefix.length) {
-                    return key.substr(this._cacheKeyPrefix.length);
+                if (this.cacheKeyPrefix && key.length > this.cacheKeyPrefix.length) {
+                    return key.substr(this.cacheKeyPrefix.length);
                 } else {
                     return key;
                 }
@@ -77,7 +76,7 @@ export class CacheLocalStorage implements Storage {
     }
 
     constructor(@Optional() @Inject(STORAGE_CACHE_KEY_PREFIX) cacheKeyPrefix?: string) {
-        this._cacheKeyPrefix = cacheKeyPrefix || DEFAULT_STORAGE_CACHE_KEY_PREFIX;
+        this.cacheKeyPrefix = cacheKeyPrefix || DEFAULT_STORAGE_CACHE_KEY_PREFIX;
     }
 
     setItem(key: string, value: CacheItem): boolean {
@@ -86,7 +85,7 @@ export class CacheLocalStorage implements Storage {
         }
 
         try {
-            localStorage.setItem(`${this._cacheKeyPrefix}${key}`, JSON.stringify(value));
+            localStorage.setItem(`${this.cacheKeyPrefix}${key}`, JSON.stringify(value));
 
             return true;
         } catch (e) {
@@ -99,12 +98,13 @@ export class CacheLocalStorage implements Storage {
             return undefined;
         }
 
-        const value = localStorage.getItem(`${this._cacheKeyPrefix}${key}`);
+        const value = localStorage.getItem(`${this.cacheKeyPrefix}${key}`);
 
         if (value == null) {
             return undefined;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const obj = JSON.parse(value);
 
         if (typeof obj === 'object') {
@@ -119,7 +119,7 @@ export class CacheLocalStorage implements Storage {
             return;
         }
 
-        localStorage.removeItem(`${this._cacheKeyPrefix}${key}`);
+        localStorage.removeItem(`${this.cacheKeyPrefix}${key}`);
     }
 
     clear(): void {
@@ -127,9 +127,9 @@ export class CacheLocalStorage implements Storage {
             return;
         }
 
-        if (this._cacheKeyPrefix) {
-            this.keys.forEach(key => {
-                localStorage.removeItem(`${this._cacheKeyPrefix}${key}`);
+        if (this.cacheKeyPrefix) {
+            this.keys.forEach((key) => {
+                localStorage.removeItem(`${this.cacheKeyPrefix}${key}`);
             });
         } else {
             localStorage.clear();
