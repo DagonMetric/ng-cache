@@ -7,8 +7,7 @@
  */
 
 export interface CacheItem {
-    // tslint:disable-next-line: ban-types
-    data: Object;
+    data: { [key: string]: unknown };
     hash?: string;
     absoluteExpiration?: number | null;
     lastAccessTime?: number | null;
