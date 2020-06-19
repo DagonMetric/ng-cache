@@ -18,6 +18,7 @@ export interface Storage {
     getItem(key: string): CacheItem | undefined;
     removeItem(key: string): void;
     clear(): void;
+
     _getNgCacheVersion(): string | null | undefined;
     _setNgCacheVersion(ver: string): void;
 }
