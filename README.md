@@ -2,7 +2,6 @@
 
 [![GitHub Actions Status](https://github.com/DagonMetric/ng-cache/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-cache/actions)
 [![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-cache/_apis/build/status/DagonMetric.ng-cache?branchName=master)](https://dev.azure.com/DagonMetric/ng-cache/_build/latest?definitionId=13&branchName=master)
-[![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-cache.svg)](https://www.npmjs.com/package/@dagonmetric/ng-cache)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Caching & storage service for Angular applications.
@@ -23,6 +22,8 @@ or yarn
 yarn add @dagonmetric/ng-cache
 ```
 
+Latest npm package is [![npm version](https://badge.fury.io/js/%40dagonmetric%2Fng-cache.svg)](https://www.npmjs.com/package/@dagonmetric/ng-cache)
+
 ### Module Setup (app.module.ts)
 
 ```typescript
@@ -40,6 +41,8 @@ import { CacheLocalStorageModule, CacheModule, MemoryCacheModule } from '@dagonm
 })
 export class AppModule { }
 ```
+
+Live edit [app.module.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-cache/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.module.ts)
 
 ### Usage (app.component.ts)
 
@@ -64,9 +67,15 @@ export class UserService {
 }
 ```
 
+Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-cache/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.component.ts)
+
+## Samples & Documentations
+
+* Demo app [view source](https://github.com/DagonMetric/ng-cache/tree/master/samples/demo-app) / [live edit in stackblitz](https://stackblitz.com/github/dagonmetric/ng-cache/tree/master/samples/demo-app)
+
 ## Feedback and Contributing
 
-Check out the [Contributing](https://github.com/DagonMetric/ng-cache/blob/master/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
+Check out the [Contributing](https://github.com/DagonMetric/ng-cache/blob/master/CONTRIBUTING.md) page.
 
 ## License
 
