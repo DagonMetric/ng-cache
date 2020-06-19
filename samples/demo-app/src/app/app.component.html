@@ -1,4 +1,31 @@
 <header class="toolbar">
     <h1>NG-CACHE Demo</h1>
 </header>
+<main>
+    <section *ngIf="appOptions$ | async as appOptions">
+        <div class="title">
+            <code>
+                cacheService.getOrSet()
+            </code>
+        </div>
+        <p>
+            <code>
+                <p>
+                    // Example:
+                    <br>
+                    const appOptions$ = this.cacheService.getOrSet('configuration', () => &#123;
+                    <br>
+                    &nbsp;&nbsp;return this.httpClient.get&#x3C;AppOptions&#x3E;('api/configuration');
+                    <br>
+                    &#125;);
+                </p>
+                <p>
+                    // Output:
+                    <br>
+                    appOptions: {{appOptions | json}}
+                </p>
+            </code>
+        </p>
+    </section>
 
+</main>

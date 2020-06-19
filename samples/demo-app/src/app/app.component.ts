@@ -1,6 +1,22 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import { environment } from '../environments/environment';
+import { Observable } from 'rxjs';
+
+import { CacheService } from '@dagonmetric/ng-cache';
+
+export interface AppOptions {
+    name: string;
+    lang: string;
+    logEnabled: boolean;
+    logLevel: number;
+    num: number;
+    arr: string[];
+    child: {
+        key1: string;
+        key2: boolean;
+    };
+}
 
 @Component({
     selector: 'app-root',
@@ -9,9 +25,13 @@ import { environment } from '../environments/environment';
     encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-    isProd?: boolean;
+    appOptions$: Observable<AppOptions>;
 
-    constructor() {
-        this.isProd = environment.production;
+    constructor(private readonly cacheService: CacheService, private readonly httpClient: HttpClient) {
+        this.appOptions$ = this.cacheService.getOrSet('configuration', () => {
+            return this.httpClient.get<AppOptions>(
+                'https://us-central1-ng-config-demo.cloudfunctions.net/configuration'
+            );
+        });
     }
 }
