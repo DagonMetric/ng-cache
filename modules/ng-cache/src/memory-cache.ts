@@ -19,52 +19,44 @@ import { STORAGE, Storage } from './storage';
     providedIn: 'root'
 })
 export class MemoryCache implements Cache {
-    private readonly _store = new Map<string, CacheItem>();
-    private _storageKeyLoaded = false;
-
-    get storage(): Storage | null | undefined {
-        return this._storage;
-    }
+    private readonly store = new Map<string, CacheItem>();
+    private storageKeyLoaded = false;
 
     get keys(): string[] {
-        const keyArray = Array.from(this._store.keys());
-        if (!this._storageKeyLoaded && this.storage && this.storage.enabled) {
+        const keyArray = Array.from(this.store.keys());
+        if (!this.storageKeyLoaded && this.storage && this.storage.enabled) {
             const storeKeys = this.storage.keys;
             if (storeKeys) {
-                storeKeys
-                    .filter(k => !keyArray.includes(k))
-                    .forEach(k => keyArray.push(k));
+                storeKeys.filter((k) => !keyArray.includes(k)).forEach((k) => keyArray.push(k));
             }
 
-            this._storageKeyLoaded = true;
+            this.storageKeyLoaded = true;
         }
 
         return keyArray;
     }
 
-    constructor(@Optional() @Inject(STORAGE) private readonly _storage?: Storage) {
-    }
+    constructor(@Optional() @Inject(STORAGE) readonly storage?: Storage) {}
 
     init(data?: { [key: string]: CacheItem }): void {
         if (!data) {
             return;
         }
 
-        Object.keys(data)
-            .forEach((key: string) => {
-                this.setItem(key, data[key]);
-            });
+        Object.keys(data).forEach((key: string) => {
+            this.setItem(key, data[key]);
+        });
     }
 
     setItem(key: string, value: CacheItem): void {
-        this._store.set(key, value);
+        this.store.set(key, value);
         if (this.storage && this.storage.enabled) {
             this.storage.setItem(key, value);
         }
     }
 
     getItem(key: string): CacheItem | null | undefined {
-        let data = this._store.get(key);
+        let data = this.store.get(key);
         if (!data && this.storage && this.storage.enabled) {
             data = this.storage.getItem(key);
         }
@@ -73,14 +65,14 @@ export class MemoryCache implements Cache {
     }
 
     removeItem(key: string): void {
-        this._store.delete(key);
+        this.store.delete(key);
         if (this.storage && this.storage.enabled) {
             this.storage.removeItem(key);
         }
     }
 
     clear(): void {
-        this._store.clear();
+        this.store.clear();
         if (this.storage && this.storage.enabled) {
             this.storage.clear();
         }
