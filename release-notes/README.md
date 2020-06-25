@@ -2,6 +2,7 @@
 
 | Date (UTC) | Version |  |  |
 | :-- | :-- | :--: | :-- |
+| 2020-06-25 | 2.0.6 | [release notes](v2.0.6/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-cache/v/2.0.6) | - |
 | 2020-06-19 | 2.0.5 | [release notes](v2.0.5/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-cache/v/2.0.5) | - |
 | 2020-01-06 | 2.0.4 | [release notes](v2.0.4/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-cache/v/2.0.4) | - |
 | 2019-10-14 | 2.0.3 | [release notes](v2.0.3/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-cache/v/2.0.3) | - |
