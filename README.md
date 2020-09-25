@@ -75,6 +75,12 @@ Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonme
 
 * Demo app [view source](https://github.com/DagonMetric/ng-cache/tree/master/samples/demo-app) / [live edit in stackblitz](https://stackblitz.com/github/dagonmetric/ng-cache/tree/master/samples/demo-app)
 
+## Build & Test Tools
+
+We use [lib-tools](https://github.com/lib-tools/lib-tools) for bundling, testing and packaging our library projects.
+
+[![Lib Tools](https://repository-images.githubusercontent.com/273890506/28038a00-dcea-11ea-8b4a-7d655158ccf2)](https://github.com/lib-tools/lib-tools)
+
 ## Feedback and Contributing
 
 Check out the [Contributing](https://github.com/DagonMetric/ng-cache/blob/master/CONTRIBUTING.md) page.
