@@ -40,12 +40,11 @@ export class CacheService {
     ) {
         this.options = options || {};
         this.logger = this.options.logger || {
-            // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
             debug(message: string, optionalParam: unknown): void {
                 // eslint-disable-next-line no-console
                 console.log(message, optionalParam);
             },
-            // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+
             error(message: string | Error, optionalParam: unknown): void {
                 console.error(message, optionalParam);
             }
@@ -172,6 +171,7 @@ export class CacheService {
 
     private getOrSetInternal(
         key: string,
+        // eslint-disable-next-line no-shadow
         factory: (entryOptions: CacheEntryOptions) => Observable<unknown> | Promise<unknown> | unknown,
         options?: CacheEntryOptions,
         returnType: ReturnType = ReturnType.Observable

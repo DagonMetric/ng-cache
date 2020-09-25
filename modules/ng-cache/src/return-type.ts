@@ -6,6 +6,7 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
+// eslint-disable-next-line no-shadow
 export enum ReturnType {
     Observable = 1,
     Promise = 2,
