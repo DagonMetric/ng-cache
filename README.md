@@ -48,22 +48,39 @@ Live edit [app.module.ts in stackblitz](https://stackblitz.com/github/dagonmetri
 
 ```typescript
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-// ng-cache
 import { CacheService } from '@dagonmetric/ng-cache';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class UserService {
-  constructor(private cacheService: CacheService, private httpClient: HttpClient) { }
+export interface AppOptions {
+  name: string;
+  lang: string;
+  logEnabled: boolean;
+  logLevel: number;
+  num: number;
+  arr: string[];
+  child: {
+    key1: string;
+    key2: boolean;
+  };
+}
 
-  getUsers(): Observable<User[]> {
-    return this.cacheService.getOrSet('users', () => {
-      return this.httpClient.get<User[]>('/api/users');
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class AppComponent {
+  appOptions$: Observable<AppOptions>;
+
+  constructor(private readonly cacheService: CacheService, private readonly httpClient: HttpClient) {
+    this.appOptions$ = this.cacheService.getOrSet('configuration', () => {
+      return this.httpClient.get<AppOptions>(
+        'https://us-central1-ng-config-demo.cloudfunctions.net/configuration'
+      );
     });
   }
 }
